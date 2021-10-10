@@ -35,6 +35,7 @@ VirtualMethodPointer Shape_VTable [] =
 
 Shape* Shape_Shape(Shape* _this, char* newName)
 {
+    _this->VPointer = Shape_VTable;
     _this->name = newName;
     return _this;
 }
@@ -76,7 +77,8 @@ VirtualMethodPointer Triangle_VTable [] =
 
 Triangle* Triangle_Triangle(Triangle* _this, char* newName, int h, int b)
 {
-    _this->name = newName;
+    Shape_Shape((Shape*)_this, newName);
+    _this->VPointer = Triangle_VTable;
     _this->height = h;
     _this->base = b;
     return _this;
@@ -85,20 +87,23 @@ Triangle* Triangle_Triangle(Triangle* _this, char* newName, int h, int b)
 
 int main(int argc, char* argv[])
 {
-    printf("%d\n", argc);
-    printf("%d, %d", atoi(argv[1]), atoi(argv[2]));
-    Shape* shapes[] = {};
 
-    Shape* s = Shape_Shape((Shape*)malloc(sizeof(Shape)), "Test");
+    // printf("ABC");
+    int arg1 = atoi(argv[1]);
+    int arg2 = atoi(argv[2]);
+    // printf("%d, %d\n", arg1, arg2);
+    Shape* shapes[] = {
+        (Shape*)Triangle_Triangle((Triangle*)malloc(sizeof(Triangle)), "FirstTriangle", arg1, arg2),
+        (Shape*)Triangle_Triangle((Triangle*)malloc(sizeof(Triangle)), "SecondTriangle", arg1-1, arg2-1),
 
-    Shape_draw(s);
+    };
 
-    Triangle* firstTriange = Triangle_Triangle(
-        (Triangle*)malloc(sizeof(Triangle)), "FirstTriangle", 5, 5
-    );
-
-    Triangle_printName(firstTriange);
-    Triangle_draw(firstTriange);
+    int i;
+    for (i = 0; i < sizeof(shapes) / sizeof(*shapes); i++)
+    {
+        (shapes[i]->VPointer[2])(shapes[i]);
+    }
+    
 
     return 0;
 }
