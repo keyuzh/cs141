@@ -1,6 +1,7 @@
 #include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 typedef double (*VirtualMethodPointer)(void *);
 typedef VirtualMethodPointer *VtableType;
@@ -83,6 +84,50 @@ Triangle* Triangle_Triangle(Triangle* _this, char* newName, int h, int b)
     _this->base = b;
     return _this;
 }
+// end class Triangle
+
+typedef struct Circle
+    // extends Shape
+{
+    VtableType VPointer;
+    char* name;
+    int radius;
+}Circle;
+
+double Circle_area(Circle* _this)
+{
+    return M_PI * _this->radius * _this->radius;
+}
+
+void Circle_draw(Circle* _this)
+{
+    printf("    *  *    ");
+    printf(" *        * ");
+    printf("*          *");
+    printf("*          *");
+    printf(" *        * ");
+    printf("    *  *    ");
+}
+
+void Circle_printName(Circle* _this)
+{
+    printf("%s(%d) : %.2f\n", _this->name, _this->radius, Circle_area(_this));
+}
+
+VirtualMethodPointer Circle_VTable [] =
+{
+    (VirtualMethodPointer) Circle_area,
+    (VirtualMethodPointer) Circle_draw,
+    (VirtualMethodPointer) Circle_printName,
+};
+
+Circle* Circle_Circle(Circle* _this, char* newName, int r)
+{
+    Shape_Shape((Shape*)_this, newName);
+    _this->VPointer = Circle_VTable;
+    _this->radius = r;
+    return _this;
+}
 
 
 int main(int argc, char* argv[])
@@ -95,7 +140,8 @@ int main(int argc, char* argv[])
     Shape* shapes[] = {
         (Shape*)Triangle_Triangle((Triangle*)malloc(sizeof(Triangle)), "FirstTriangle", arg1, arg2),
         (Shape*)Triangle_Triangle((Triangle*)malloc(sizeof(Triangle)), "SecondTriangle", arg1-1, arg2-1),
-
+        (Shape*)Circle_Circle((Circle*)malloc(sizeof(Circle)), "FirstCircle", arg1),
+        (Shape*)Circle_Circle((Circle*)malloc(sizeof(Circle)), "SecondCircle", arg1-1),
     };
 
     int i;
@@ -104,6 +150,7 @@ int main(int argc, char* argv[])
         (shapes[i]->VPointer[2])(shapes[i]);
     }
     
+
 
     return 0;
 }
