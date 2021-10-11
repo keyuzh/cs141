@@ -252,6 +252,12 @@ int main(int argc, char* argv[])
     {
         (shapes[i]->VPointer[1])(shapes[i]);
     }
+
+    // deallocate memory
+    for (i = 0; i < sizeof(shapes) / sizeof(*shapes); i++)
+    {
+        free(shapes[i]);
+    }
     
     return 0;
 }
