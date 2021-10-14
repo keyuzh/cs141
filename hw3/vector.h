@@ -63,12 +63,28 @@ public:
     Vector operator + (const Vector & v) const 
 // V3 = V1 + V2; [1, 2, 3] + [4, 5, 6, 7] = [5, 7, 9, 7]
     {
-        for (unsigned int i = 0; i < std::min(); i++)
+        Vector<T> result(std::max(v.size(), this.size()));
+        for (unsigned int i = 0; i < std::min(v.size(), this.size()); i++)
         {
-            /* code */
+            result[i] = this[i] + v[i];
         }
-        
-        // Implementation Here;
+        if (this.size() < v.size())
+        {
+            // this is shorter
+            for (unsigned int i = this.size(); i < v.size(); i++)
+            {
+                result[i] = v[i];
+            }
+        }
+        else
+        {
+            // v is shorter
+            for (unsigned int i = v.size(); i < this.size(); i++)
+            {
+                result[i] = this[i];
+            }
+        }
+        return result;
     }
     const Vector & operator = (const Vector & v) // V1 = V2;
     {
@@ -76,11 +92,22 @@ public:
     }
     bool operator == (const Vector & v) const // if (V1 == V2)...
     {
-        // Implementation Here;
+        if (this.size() != v.size())
+        {
+            return false;
+        }
+        for (unsigned int i = 0; i < this.size(); i++)
+        {
+            if (buf[i] != v[i])
+            {
+                return false;
+            }
+        }
+        return true;
     }
     bool operator != (const Vector & v) const // if (V1 != V2)...
     {
-        // Implementation Here;
+        return !(this == v);
     }
     friend Vector operator * (const int n, const Vector & v)
     // V1 = 20 * V2; -- each element of V1 is element of V2 * 20
@@ -97,8 +124,8 @@ public:
 // (v0, v1, v2, ... vn-1);
     {
         // Implementation Here;
+        return o;
     }
 };
 
 #endif
-h
