@@ -27,6 +27,12 @@ public:
         buf = new T[size * 2 + 1];
         sz = size;
         bufSz = 2 * size + 1;
+        unsigned int i = 0;
+        for (auto j : L)
+        {
+            buf[i] = j;
+            i++;
+        }
     }
     ~Vector() // destructor called automatically when a Vector dies 
     {
@@ -35,7 +41,13 @@ public:
 /* Destructor should free memory used. your program should have no leak/lost/still-reachable/errors(suppressed or not), besides 72704 bytes in one still-reachable block (a g++/valgrind bug on some versions). */
     Vector(const Vector & v) // Vector v2(v1); deep-copy
     {
-        // Implementation Here;
+        buf = new T[v.bufSz];
+        bufSz = v.bufSz;
+        for (unsigned int i = 0; i < v.size(); i++)
+        {
+            buf[i] = v.buf[i];
+        }
+        sz = v.size();
     }
     int size() const // v1.size() returns 10 for v1 example above
     {
@@ -55,7 +67,13 @@ public:
 /*Access out-of-bound index should throw an error to be caught in outside scope */
     T operator * (const Vector & v) const
     {
-        return 0;
+        T result = 0;
+        for (unsigned int i = 0; i < std::min(this.size, v.size()); i++)
+        {
+            result += buf[i] + v.buf[i];
+        }
+        
+        return result;
     }
 // T x = V1 * V2; dot product
 // e.g. [1, 2] * [3, 4, 5] = 1 * 3 + 2 * 4 + 0 = 11
@@ -88,7 +106,26 @@ public:
     }
     const Vector & operator = (const Vector & v) // V1 = V2;
     {
-        // Implementation Here;
+        T* newBuf;
+        unsigned int newBufSz;
+        if (v.bufSz > bufSz)
+        {
+            newBuf = new T[v.bufSz];
+            newBufSz = v.bufSz;
+        }
+        else
+        {
+            newBuf = buf;
+            newBufSz = bufSz;
+        }
+        for (unsigned int i = 0; i < v.size(); i++)
+        {
+            newBuf[i] = v.buf[i];
+        }
+        delete buf;
+        buf = newBuf;
+        bufSz = newBufSz;
+        sz = v.size();
     }
     bool operator == (const Vector & v) const // if (V1 == V2)...
     {
@@ -112,18 +149,38 @@ public:
     friend Vector operator * (const int n, const Vector & v)
     // V1 = 20 * V2; -- each element of V1 is element of V2 * 20
     {
-        // Implementation Here;
+        Vector<T> result(v.size());
+        for (unsigned int i = 0; i < v.size(); i++)
+        {
+            result[i] = v.buf[i] * n;
+        }
+        return result;
     }
     friend Vector operator + (const int n, const Vector & v)
     // V1 = 20 + V2; -- each element of V1 is element of V2 + 20
     {
-        // Implementation Here;
+        Vector<T> result(v.size());
+        for (unsigned int i = 0; i < v.size(); i++)
+        {
+            result[i] = v.buf[i] + n;
+        }
+        return result;
     }
     friend ostream& operator << (ostream & o, const Vector & v)
     // cout << V2; -- prints the vector in this format 
 // (v0, v1, v2, ... vn-1);
     {
-        // Implementation Here;
+        o << "(";
+        for (unsigned int i = 0; i < v.size(); i++)
+        {
+            if (i != 0)
+            {
+                o << ", ";
+            }
+            o << v.buf[i];
+        }
+        o << ");";
+        
         return o;
     }
 };
