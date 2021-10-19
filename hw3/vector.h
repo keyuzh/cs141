@@ -32,7 +32,7 @@ public:
     }
     ~Vector() // destructor called automatically when a Vector dies 
     {
-        delete buf;
+        delete[] buf;
     }
 /* Destructor should free memory used. your program should have no leak/lost/still-reachable/errors(suppressed or not), besides 72704 bytes in one still-reachable block (a g++/valgrind bug on some versions). */
     Vector(const Vector & v) // Vector v2(v1); deep-copy
@@ -108,7 +108,7 @@ public:
             {
                 newBuf[i] = v.buf[i];
             }
-            delete buf;
+            delete[] buf;
             buf = newBuf;
             sz = v.size();
         }
