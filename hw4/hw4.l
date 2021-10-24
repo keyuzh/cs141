@@ -131,10 +131,10 @@
 (defun my-fold-helper (f aggre L acc)
     (cond
         ((null L) acc)
-        (T (my-fold-helper f aggre (cdr L) (f acc (car L))))
+        (T (my-fold-helper f aggre (cdr L) (funcall f acc (car L))))
     )
 )
 
 (defun my-fold (f aggre L)
-    (my-fold-helper f aggre (cdr L) (f aggre (car L)))
+   (my-fold-helper f aggre (cdr L) (funcall f aggre (car L)))
 )
