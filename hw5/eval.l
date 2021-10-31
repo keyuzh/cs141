@@ -88,7 +88,7 @@
             (cdr formals)
             (cdr actuals)
             (append (list (cons (car formals) (car actuals))) alist)
-        )
+        ))
     )
 )
 
@@ -135,12 +135,18 @@
 (defun my-eval-setq (var val)
 ;; just push a new association of the var and its evaluated val onto the
 ;; global alist
-    (setq global-alist (append (list (cons var val)) global-alist))
+    (setq global-alist (cons (cons var val) global-alist))
 )
 
 ;; You need to write this one.  You should know how cond works at this point.
 ;; Remember, cond clauses have one or more expressions in each clause.
 (defun my-eval-cond (clauses alist)
+    (print (cadar clauses))
+    (cond
+        ((null clauses) nil)
+        ((my-eval (caar clauses) alist) (my-eval (cadar clauses) alist))
+        (T (my-eval-cond (cdr clauses) alist))
+    )
 )
 
 ;; You need to write this one.
@@ -150,6 +156,7 @@
 ;; have a list containing the formal parameters and the expressions in
 ;; the function body.
 (defun my-eval-defun (body alist)
+    (setq global-alist (cons (cons (car body) (cdr body)) global-alist))
 )
 
 ;; This one is done, it just initializes the global alist where global
