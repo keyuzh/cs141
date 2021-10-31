@@ -21,7 +21,11 @@
 
 ;; You need to write this one.
 (defun my-assoc (v alist)
-  nil
+    (cond 
+        ((null alist) nil)
+        ((eq v (car (car alist))) (car alist))
+        (T (my-assoc v (cdr alist)))
+    )
 )
 
 ;; This one is done
@@ -35,6 +39,13 @@
 (defun my-eval-atom (e alist)
 ;; how do you evaluate an atom???
 ;; Remember there are special cases: T, NIL, ASYMBOL, 10, "Hello"
+    (cond
+        ((null e) nil)
+        ((eq T e) T)
+        ((symbolp e) (cdr (my-assoc e alist)))
+        ((numberp e) e)
+        ((stringp e) e)
+    )
 )
 
 ;; This one is done, but you must write the functions it calls
@@ -47,7 +58,10 @@
 ;; Utility function for eval-cond and apply-lambda.  Evaluates each expression
 ;; in l and returns the value of the last expression
 (defun my-eval-list (l alist)
-  nil
+    (cond
+        ((nil (cdr l)) (my-eval (car l) alist))
+        (T )
+    )
 )
 
 ;; You need to write this one.
@@ -68,7 +82,14 @@
 ;; e.g., (my-bind-formals '(a) '((add 1 b)) '((b . 10)))
 ;; will return ((a . 11) (b . 10))
 ;; Note there will be one actual parameter for each formal parameter.
-
+    (cond 
+        ((null formals) alist)
+        (T (my-bind-formals
+            (cdr formals)
+            (cdr actuals)
+            (append (list (cons (car formals) (car actuals))) alist)
+        )
+    )
 )
 
 ;; You need to write this one.  Handle the primitives as special cases, then
@@ -82,14 +103,18 @@
            (eq (my-eval (car args) alist) (my-eval (cadr args) alist)))
           ;; I wrote the first one, eq, for you, you write the rest
           ((eq fn 'car)
+           (car (my-eval (car args) alist))
           )
           ((eq fn 'cdr)
+           (cdr (my-eval (car args) alist))
           )
           ((eq fn 'cons)
+            (cons (my-eval (car args) alist) (my-eval (cadr args) alist))
           )
           ((eq fn 'quote)
+            (car args)
           )
-          ((eq fn 'setq) (my-eval-setq ...))
+          ((eq fn 'setq) (my-eval-setq (car args) (my-eval (cadr args) alist)))
           ;; these are (nearly) done, but you must write the sub-functions
           ((eq fn 'cond) (my-eval-cond args alist))
           ((eq fn 'defun) (my-eval-defun args alist))
@@ -110,6 +135,7 @@
 (defun my-eval-setq (var val)
 ;; just push a new association of the var and its evaluated val onto the
 ;; global alist
+    (setq global-alist (append (list (cons var val)) global-alist))
 )
 
 ;; You need to write this one.  You should know how cond works at this point.
