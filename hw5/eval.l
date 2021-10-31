@@ -50,6 +50,10 @@
 
 ;; This one is done, but you must write the functions it calls
 (defun my-apply (fn args alist)
+    ;; (print "apply")
+    ;; (print fn)
+    ;; (print args)
+    ;; (print alist)
     (cond ((atom fn) (my-apply-atom fn args alist))
           ( t (my-apply-lambda fn args alist)))
 )
@@ -58,9 +62,13 @@
 ;; Utility function for eval-cond and apply-lambda.  Evaluates each expression
 ;; in l and returns the value of the last expression
 (defun my-eval-list (l alist)
+    ;; (print "list")
+    ;; (print l)
+    ;; (print (cdr l))
+    ;; (print (car l))
     (cond
-        ((nil (cdr l)) (my-eval (car l) alist))
-        (T )
+        ((null (cdr l)) (my-eval (car l) alist))
+        (T (my-eval (car l) alist) (my-eval-list (cdr l) alist))
     )
 )
 
@@ -70,6 +78,11 @@
 ;; new scoping context (i.e., that becomes the new alist for recursive
 ;; evaluation of the function body.  Return the value of the last 
 ;; expression in the body (using eval-list).
+    ;; (print "lambda")
+    ;; (print fn)
+    ;; (print args)
+    ;; (print alist)
+    (my-eval-list (cddr fn) (my-bind-formals (cadr fn) args alist))
 )
 
 ;; You need to write this one.
@@ -84,10 +97,8 @@
 ;; Note there will be one actual parameter for each formal parameter.
     (cond 
         ((null formals) alist)
-        (T (my-bind-formals
-            (cdr formals)
-            (cdr actuals)
-            (append (list (cons (car formals) (car actuals))) alist)
+        (T (cons (cons (car formals) (my-eval (car actuals) alist))
+            (my-bind-formals (cdr formals) (cdr actuals) alist)
         ))
     )
 )
@@ -114,12 +125,22 @@
           ((eq fn 'quote)
             (car args)
           )
+          ((eq fn 'add)
+            (+ (my-eval (car args) alist) (my-eval (cadr args) alist))
+          )
+          ((eq fn 'null)
+            (null (my-eval (car args) alist))
+          )
+          ((eq fn 'print)
+            (print (my-eval (car args) alist))
+          )
           ((eq fn 'setq) (my-eval-setq (car args) (my-eval (cadr args) alist)))
           ;; these are (nearly) done, but you must write the sub-functions
           ((eq fn 'cond) (my-eval-cond args alist))
           ((eq fn 'defun) (my-eval-defun args alist))
           ((eq fn 'eval) (my-eval (my-eval (car args) alist) alist))
           (T (my-apply ;; get the lambda from the alist, 
+            (my-assoc fn alist)
                        args alist))
 	;; nil listp
     )
@@ -136,15 +157,19 @@
 ;; just push a new association of the var and its evaluated val onto the
 ;; global alist
     (setq global-alist (cons (cons var val) global-alist))
+    val
 )
 
 ;; You need to write this one.  You should know how cond works at this point.
 ;; Remember, cond clauses have one or more expressions in each clause.
 (defun my-eval-cond (clauses alist)
-    (print (cadar clauses))
+    ;; (print "cond")
+    ;; (print clauses)
+    ;; (print (caar clauses))
+    ;; (print (cdar clauses))
     (cond
         ((null clauses) nil)
-        ((my-eval (caar clauses) alist) (my-eval (cadar clauses) alist))
+        ((my-eval (caar clauses) alist) (my-eval-list (cdar clauses) alist))
         (T (my-eval-cond (cdr clauses) alist))
     )
 )
@@ -157,6 +182,7 @@
 ;; the function body.
 (defun my-eval-defun (body alist)
     (setq global-alist (cons (cons (car body) (cdr body)) global-alist))
+    (car body)
 )
 
 ;; This one is done, it just initializes the global alist where global
