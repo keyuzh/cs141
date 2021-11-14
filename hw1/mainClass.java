@@ -9,7 +9,7 @@ class Shape
 
     public double area()
     {
-        // virtual, will be overridden in derived classes
+        // virtual, will be overridden in der_helpered classes
         return 0.0;
     }
 
@@ -21,7 +21,7 @@ class Shape
 
     public void printName()
     {
-        // virtual, will be overridden in derived classes
+        // virtual, will be overridden in der_helpered classes
         return;
     }
 }
