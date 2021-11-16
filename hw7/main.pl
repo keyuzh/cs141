@@ -177,10 +177,6 @@ eval(X+Y, R) :- eval(X, XR), eval(Y, YR), R = XR+YR.
 eval(X*Y, R) :- eval(X, XR), eval(Y, YR), R = XR*YR.
 eval(X-Y, R) :- eval(X, XR), eval(Y, YR), R = XR-YR.
 eval(X/Y, R) :- eval(X, XR), eval(Y, YR), R = XR/YR.
-% eval(X+Y, XR+YR) :- eval(X, XR), eval(Y, YR).
-% eval(X*Y, XR*YR) :- eval(X, XR), eval(Y, YR).
-% eval(X-Y, XR-YR) :- eval(X, XR), eval(Y, YR).
-% eval(X/Y, XR/YR) :- eval(X, XR), eval(Y, YR).
 
 % fallback when nothing matches
 eval(X, X).
