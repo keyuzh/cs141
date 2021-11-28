@@ -30,9 +30,9 @@ class Printer
     void print(StringBuffer b)
     {
         try {
-            System.out.println("writing ");
-            FileWriter writer = new FileWriter(this.filepath);
-            writer.write(b.toString());
+            // System.out.println("writing ");
+            FileWriter writer = new FileWriter(this.filepath, true);
+            writer.write(b.toString() + "\n");
             writer.close();
             Thread.sleep(2750);
         } catch (IOException e) {

@@ -23,7 +23,7 @@ class UserThread
                 saveFile(ln[1]);
                 break;
             case ".print":
-                System.out.println("print");
+                // System.out.println("print");
                 printFile(ln[1]);
                 break;
             default:
@@ -43,7 +43,7 @@ class UserThread
             this.sb.delete(0, this.sb.length());
             this.sb.append(line);
             if (this.sb.toString().equals(".end")) {
-                System.out.println("ENDDDx");
+                // System.out.println("ENDDDx");
                 this.sb.delete(0, this.sb.length());
                 this.sb.append(filename);
                 mainClass.diskm.dirm.enter(this.sb, new FileInfo(diskNumber, offset, fileLines));
@@ -56,7 +56,7 @@ class UserThread
         }
         mainClass.diskm.setNextFreeSector(diskNumber, offset+fileLines);
         mainClass.diskm.release(diskNumber);
-        System.out.print("save file");
+        // System.out.print("save file");
 
         // for (int i = 0; i < 3; i++) {
         //     mainClass.disks[i].printDisks();
@@ -79,12 +79,12 @@ class UserThread
 
         while (this.sc.hasNextLine()) {
             String line = this.sc.nextLine();
-            System.out.println(line);
+            // System.out.println(line);
             this.sb.delete(0, this.sb.length());
             this.sb.append(line);
             processCommand();
         }
-        System.out.println("end");
+        // System.out.println("end");
 
         sc.close();
     }

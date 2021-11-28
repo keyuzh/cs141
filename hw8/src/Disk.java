@@ -8,11 +8,11 @@ class Disk
 
     public Disk() {
         this.setDaemon(true);
-        System.out.println("create disk");
+        // System.out.println("create disk");
         for (int i = 0; i < sectors.length; i++) {
             sectors[i] = new StringBuffer();
         }
-        System.out.println("x");
+        // System.out.println("x");
     }
 
     void copyStringBuffer(StringBuffer to, StringBuffer from) {
@@ -27,7 +27,7 @@ class Disk
             Thread.sleep(200);
         } catch (InterruptedException e) {
             //TODO: handle exception
-            System.out.println("write");
+            // System.out.println("write");
         }
     }
 
@@ -38,7 +38,7 @@ class Disk
             Thread.sleep(200);
         } catch (InterruptedException e) {
             //TODO: handle exception
-            System.out.println("read");
+            // System.out.println("read");
         }
     }
 

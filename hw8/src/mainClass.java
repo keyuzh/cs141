@@ -16,15 +16,14 @@ public class mainClass {
         int numOfDisks = Integer.parseInt(args[numOfUsers+1].substring(1));
         int numOfPrinters = Integer.parseInt(args[numOfUsers+2].substring(1));
 
-        System.out.println(String.format("numOfUsers: %d, numOfDisks: %d, numOfPrinters: %d", numOfUsers, numOfDisks, numOfPrinters));
-        for (String string : userInputs) {
-            System.out.println(string);
-        }
+        // System.out.println(String.format("numOfUsers: %d, numOfDisks: %d, numOfPrinters: %d", numOfUsers, numOfDisks, numOfPrinters));
+        // for (String string : userInputs) {
+        //     System.out.println(string);
+        // }
 
         users = new UserThread[numOfUsers];
         for (int i = 0; i < numOfUsers; i++) {
             users[i] = new UserThread(i+1);
-            System.out.println("b");
         }
 
         disks = new Disk[numOfDisks];
