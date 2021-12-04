@@ -46,6 +46,7 @@
     },
     "java.project.sourcePaths": [
         "hw8/src",
-        "week9"
+        "week9",
+        "hw9/src"
     ]
 }
