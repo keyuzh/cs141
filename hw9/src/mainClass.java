@@ -10,7 +10,7 @@ public class mainClass {
 
     public static void startUserThreads(int numOfUsers) {
         for (int i = 0; i < numOfUsers; i++) {
-            System.out.println(String.format("starting %d", i+1));
+            // System.out.println(String.format("starting %d", i+1));
             users[i].start();
         }
     }

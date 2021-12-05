@@ -59,7 +59,7 @@ class UserThread
             else {
                 if (mainClass.showGUI) {
                     mainClass.gui.changeButtonStatus("user", this.userID, 
-                        "writing to disk" + (diskNumber+1) + "<br/>Line: " + this.sb.toString(), java.awt.Color.blue);
+                        "writing to disk" + (diskNumber+1) + "<br/>Line: " + this.sb.toString(), java.awt.Color.yellow);
                 }
                 mainClass.disks[diskNumber].write(offset + fileLines, this.sb);
                 fileLines++;

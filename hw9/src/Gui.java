@@ -1,4 +1,3 @@
-
 import javax.swing.*;  
 import java.awt.*;
 import java.awt.event.*;
@@ -12,11 +11,7 @@ class StartButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
-        button.setBackground(Color.black);
-        System.out.println("clicked");
         mainClass.startUserThreads(4);
-    
         for (int i = 1; i < 5; i++) {
             mainClass.gui.changeButtonStatus("user", i, "idle", Color.green);
         }
@@ -26,9 +21,7 @@ class StartButtonListener implements ActionListener {
         for (int i = 1; i < 3; i++) {
             mainClass.gui.changeButtonStatus("disk", i, "idle", Color.green);
         }
-        
     }
-
 }
 
 public class Gui {
@@ -61,13 +54,13 @@ public class Gui {
     }
 
     public void show(){  
-    f = new JFrame("141OS");//creating instance of JFrame  
+    f = new JFrame("141OS");
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     JLabel name = new JLabel("<html>Name: Keyu Zhang<br/><br/>UCINetID: keyuz4</html>");
     JLabel speed = new JLabel("<html>Simulation speed slider:<br/>higher number means faster speed<br/>original speed: 100</html>");
 
-    JButton start = new JButton("START");    
+    JButton start = new JButton("START");
     start.addActionListener(new StartButtonListener(start));
 
     slider = new JSlider(JSlider.VERTICAL, 0, 200, 100);  
@@ -102,9 +95,8 @@ public class Gui {
         f.add(b);
     }
 
-    f.setSize(1200,1000);//400 width and 500 height  
+    f.setSize(1200,1000);
     f.setLayout(new GridLayout(4, 4, 20, 25));    
-    f.setVisible(true);//making the frame visible  
-
+    f.setVisible(true);
     }  
 }
