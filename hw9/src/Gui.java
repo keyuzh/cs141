@@ -16,6 +16,16 @@ class StartButtonListener implements ActionListener {
         button.setBackground(Color.black);
         System.out.println("clicked");
         mainClass.startUserThreads(4);
+    
+        for (int i = 1; i < 5; i++) {
+            mainClass.gui.changeButtonStatus("user", i, "idle", Color.green);
+        }
+        for (int i = 1; i < 4; i++) {
+            mainClass.gui.changeButtonStatus("printer", i, "idle", Color.green);
+        }
+        for (int i = 1; i < 3; i++) {
+            mainClass.gui.changeButtonStatus("disk", i, "idle", Color.green);
+        }
         
     }
 
@@ -23,9 +33,36 @@ class StartButtonListener implements ActionListener {
 
 public class Gui {
     static JFrame f;
+    static JButton[] user;
+    static JButton[] printer;
+    static JButton[] disk;
+    static JSlider slider;
+
+    public void changeButtonStatus(String type, int num, String text, Color color){
+        text = "<html>" + type.toUpperCase() + num + ": " + text + "</html>";
+        switch (type) {
+            case "user":
+                user[num-1].setText(text);
+                user[num-1].setBackground(color);
+                break;
+            case "printer":
+                printer[num-1].setText(text);
+                printer[num-1].setBackground(color);
+                break;
+            case "disk":
+                disk[num-1].setText(text);
+                disk[num-1].setBackground(color);
+                break;
+        }
+    }
+
+    public static double getSpeed() {
+        return 100.0 / (double) slider.getValue();
+    }
 
     public void show(){  
     f = new JFrame("141OS");//creating instance of JFrame  
+    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     JLabel name = new JLabel("<html>Name: Keyu Zhang<br/><br/>UCINetID: keyuz4</html>");
     JLabel speed = new JLabel("<html>Simulation speed slider:<br/>higher number means faster speed<br/>original speed: 100</html>");
@@ -33,30 +70,39 @@ public class Gui {
     JButton start = new JButton("START");    
     start.addActionListener(new StartButtonListener(start));
 
-    JSlider slider = new JSlider(JSlider.VERTICAL, 0, 200, 100);  
+    slider = new JSlider(JSlider.VERTICAL, 0, 200, 100);  
     slider.setMinorTickSpacing(5);  
     slider.setMajorTickSpacing(25);  
     slider.setPaintTicks(true);  
     slider.setPaintLabels(true);  
 
-    JButton user1 = new JButton("USER1");    
-    JButton user2 = new JButton("USER2");    
-    JButton user3 = new JButton("USER3");    
-    JButton user4 = new JButton("USER4");    
+    user = new JButton[4];
+    printer = new JButton[3];
+    disk = new JButton[2];
 
-    JButton printer1 = new JButton("PAINTER1");    
-    JButton printer2 = new JButton("PAINTER2");    
-    JButton printer3 = new JButton("PAINTER3");    
-
-    JButton disk1 = new JButton("DISK1");
-    JButton disk2 = new JButton("DISK2");
+    for (int i = 0; i < 4; i++) {
+        user[i] = new JButton("USER"+(i+1));
+    }
+    for (int i = 0; i < 3; i++) {
+        printer[i] = new JButton("PRINTER"+(i+1));
+    }
+    for (int i = 0; i < 2; i++) {
+        disk[i] = new JButton("DISK"+(i+1));
+    }
 
     f.add(name); f.add(start); f.add(speed); f.add(slider);
-    f.add(user1); f.add(user2); f.add(user3); f.add(user4);
-    f.add(printer1); f.add(printer2); f.add(printer3); f.add(new JLabel());
-    f.add(disk1); f.add(disk2); f.add(new JLabel()); f.add(new JLabel());
+    for (JButton b : user) {
+        f.add(b);
+    }
+    for (JButton b : printer) {
+        f.add(b);
+    }
+    f.add(new JLabel());
+    for (JButton b : disk) {
+        f.add(b);
+    }
 
-    f.setSize(1000,1000);//400 width and 500 height  
+    f.setSize(1200,1000);//400 width and 500 height  
     f.setLayout(new GridLayout(4, 4, 20, 25));    
     f.setVisible(true);//making the frame visible  
 

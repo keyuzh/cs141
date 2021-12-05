@@ -6,6 +6,7 @@ public class mainClass {
     static DiskManager diskm;
     static PrinterManager pm;
     static Gui gui;
+    static boolean showGUI;
 
     public static void startUserThreads(int numOfUsers) {
         for (int i = 0; i < numOfUsers; i++) {
@@ -15,7 +16,7 @@ public class mainClass {
     }
 
     public static void main(String[] args) {
-        boolean showGUI = true;
+        showGUI = true;
         int numOfDisks, numOfPrinters, numOfUsers;
 
         if (args[args.length-1].equals("-ng")) {
@@ -48,7 +49,7 @@ public class mainClass {
 
         disks = new Disk[numOfDisks];
         for (int i = 0; i < numOfDisks; i++) {
-            disks[i] = new Disk();
+            disks[i] = new Disk(i+1);
         }
 
         printers = new Printer[numOfPrinters];

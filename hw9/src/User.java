@@ -8,10 +8,12 @@ class UserThread
     Scanner sc;
     StringBuffer sb;
     String filepath;
+    int userID;
 
     UserThread(int id)
     {
         // this.filepath = String.format("USER%d", id);
+        this.userID = id;
         this.filepath = String.format("inputs/USER%d", id);
         this.sb = new StringBuffer();
     }
@@ -33,6 +35,11 @@ class UserThread
 
     void saveFile(String filename) {
         // request next free disk
+
+        if (mainClass.showGUI) {
+            mainClass.gui.changeButtonStatus("user", this.userID, 
+                "requesting a disk", java.awt.Color.red);
+        }
         int diskNumber = mainClass.diskm.request();
         int offset = mainClass.diskm.getNextFreeSector(diskNumber);
         int fileLines = 0;
@@ -50,12 +57,20 @@ class UserThread
                 break;
             }
             else {
+                if (mainClass.showGUI) {
+                    mainClass.gui.changeButtonStatus("user", this.userID, 
+                        "writing to disk" + (diskNumber+1) + "<br/>Line: " + this.sb.toString(), java.awt.Color.blue);
+                }
                 mainClass.disks[diskNumber].write(offset + fileLines, this.sb);
                 fileLines++;
             }
         }
         mainClass.diskm.setNextFreeSector(diskNumber, offset+fileLines);
         mainClass.diskm.release(diskNumber);
+        if (mainClass.showGUI) {
+            mainClass.gui.changeButtonStatus("user", this.userID, 
+                "idle", java.awt.Color.green);
+        }
         // System.out.print("save file");
 
         // for (int i = 0; i < 3; i++) {
@@ -84,8 +99,11 @@ class UserThread
             this.sb.append(line);
             processCommand();
         }
-        // System.out.println("end");
-
         sc.close();
+
+        if (mainClass.showGUI) {
+            mainClass.gui.changeButtonStatus("user", this.userID, 
+                "finished", java.awt.Color.green);
+        }
     }
 }
